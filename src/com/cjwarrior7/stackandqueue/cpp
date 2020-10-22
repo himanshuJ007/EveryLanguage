@@ -1,0 +1,27 @@
+module.exports = async function (context, req) {
+  console.log("REQ==",req);
+  var message;
+  console.log(req.method);
+  if (req.method == "POST") {
+    message = await userPost(req.body);
+  } else if (req.method == "GET") {
+    var query = [];
+    if (req.body) {
+      query.push(req.body.query);
+    }
+    message = await userGet(query);
+  } else if (req.method == "PUT") {
+    message = await userUpdate(req.body);
+  } else if (req.method == "DELETE") {
+    message = await userDelete(req.body);
+  } else {
+    context.res = {
+      // status: 200, /* Defaults to 200 */
+      body: "Invalid Request",
+    };
+  }
+  return (context.res = {
+    // status: 200, /* Defaults to 200 */
+    body: message,
+  });
+};
